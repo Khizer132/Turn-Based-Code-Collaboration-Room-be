@@ -23,7 +23,7 @@ export const createMultiSession = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Join an existing multi-developer session
+// Join an existing multi-developer session => post /api/v1/session/join
 export const joinMultiSession = catchAsyncErrors(async (req, res, next) => {
     const { sessionId } = req.body;
 
@@ -38,9 +38,12 @@ export const joinMultiSession = catchAsyncErrors(async (req, res, next) => {
     if (session.developer2Id) {
         return next(new ErrorHandler("Session is already full", 400));
     }
+
     session.developer2Id = req?.user?._id;
     session.sessionStatus = "active";
+
     await session.save();
+
     res.status(200).json({
         success: true,
         message: "Joined session successfully. let's code together!",
