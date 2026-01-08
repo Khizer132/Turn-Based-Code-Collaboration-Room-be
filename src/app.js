@@ -20,12 +20,7 @@ import sessionRoutes from './routes/sessionRoutes.js';
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", sessionRoutes);
 
-// Export for Vercel serverless function
-export default app;
 
-// Only listen locally (not on Vercel)
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log("Serer listening on port:", PORT);
-    });
-}
+app.listen(PORT, () => {
+    console.log("Serer listening on port:", PORT);
+});
