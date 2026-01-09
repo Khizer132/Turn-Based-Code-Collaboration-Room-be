@@ -16,6 +16,7 @@ export const createMultiSession = catchAsyncErrors(async (req, res, next) => {
         developer1Id: req?.user?._id,
     });
 
+
     res.status(201).json({
         success: true,
         sessionId: session.sessionId,
@@ -32,9 +33,11 @@ export const joinMultiSession = catchAsyncErrors(async (req, res, next) => {
     if (!session) {
         return next(new ErrorHandler("Session not found", 404));
     }
+
     if(session.developer1Id.toString() === req?.user?._id.toString()) {
         return next(new ErrorHandler("You cannot join your own session", 400));
     }
+
     if (session.developer2Id) {
         return next(new ErrorHandler("Session is already full", 400));
     }
@@ -47,5 +50,27 @@ export const joinMultiSession = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "Joined session successfully. let's code together!",
+    });
+});
+
+
+// get into the session => get /api/v1/session/:sessionId
+export const getMultiSession = catchAsyncErrors(async (req, res, next) => {
+    const { sessionId } = req.params;
+    const session = await MultiSession.findOne({ sessionId });
+
+    if (!session) {
+        return next(new ErrorHandler("Session not found", 404));
+    }
+    // if (session.developer1Id.toString() !== req?.user?._id.toString() &&
+    //     session.developer2Id?.toString() !== req?.user?._id.toString()) {
+    //     return next(new ErrorHandler("You are not a participant of this session", 403));
+    // }
+    if (session.sessionStatus !== "active") {
+        return next(new ErrorHandler("Session is not active yet", 400));
+    }
+    res.status(200).json({
+        success: true,
+        session,
     });
 });
