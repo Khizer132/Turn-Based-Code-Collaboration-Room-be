@@ -8,6 +8,13 @@ import {app , server} from './config/socket.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5001
+app.use(cors({
+    origin: ["http://localhost:5173",
+        "https://turn-based-code-collaboration-room.vercel.app/"
+    ],
+
+    credentials: true,
+}));
 
 
 app.use(express.json());
@@ -19,10 +26,6 @@ import sessionRoutes from './routes/sessionRoutes.js';
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", sessionRoutes);
 
-app.use(cors({
-    origin: ["http://localhost:5173"],
-    credentials: true,
-}));
 
 server.listen(PORT, () => {
     console.log("Serer listening on port:", PORT);
