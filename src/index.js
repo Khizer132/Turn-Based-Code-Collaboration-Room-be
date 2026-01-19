@@ -10,7 +10,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5001
 app.use(cors({
     origin: ["http://localhost:5173",
-        "https://turn-based-code-collaboration-room.vercel.app/"
+        "https://turn-based-code-collaboration-room.vercel.app"
     ],
 
     credentials: true,
