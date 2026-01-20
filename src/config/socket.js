@@ -1,5 +1,3 @@
-// server/src/config/socket.js - COMPLETE UPDATED VERSION
-
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
@@ -111,6 +109,7 @@ function checkToStartTime(sessionId, sessionData) {
 io.on("connection", (socket) => {
     console.log("Connected to socket.io, userId:", socket.userId);
 
+    // join session - connection
     socket.on("join-session", async ({ sessionId }) => {
         try {
             const session = await MultiSession.findOne({ sessionId })
@@ -251,7 +250,7 @@ io.on("connection", (socket) => {
         }
     });
 
-    // Exchange code connection
+    // Exchange code - connection
     socket.on("code-updated", ({ code, sessionId }) => {
         const sessionData = sessionState.get(sessionId);
         if (!sessionData) return;
@@ -263,7 +262,13 @@ io.on("connection", (socket) => {
         });
     });
 
-    // Disconnect user connection
+    //  socket.on("code-operation", ({ sessionId, changes }) => {
+    //     socket.to(sessionId).emit("remote-code-operation", { changes });
+    // });
+
+
+
+    // Disconnect user - connection
     socket.on("disconnect", () => {
         console.log(`User disconnecting: ${socket.userId}`);
 
@@ -304,3 +309,7 @@ io.on("connection", (socket) => {
 });
 
 export { io, server, app };
+
+
+
+

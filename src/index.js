@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import {app , server} from './config/socket.js';
 
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5001
