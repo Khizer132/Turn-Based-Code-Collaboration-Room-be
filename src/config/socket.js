@@ -251,16 +251,33 @@ io.on("connection", (socket) => {
     });
 
     // Exchange code - connection
+    // socket.on("code-updated", ({ code, sessionId }) => {
+    //     const sessionData = sessionState.get(sessionId);
+    //     if (!sessionData) return;
+
+    //     socket.to(sessionId).emit("code-exchanged", {
+    //         code,
+    //         userId: socket.userId,
+    //         userName: socket.user.name
+    //     });
+    // });
+
     socket.on("code-updated", ({ code, sessionId }) => {
         const sessionData = sessionState.get(sessionId);
         if (!sessionData) return;
 
+        const isAllowed =
+            (socket.isDeveloper1 && sessionData.currentTurn === "developer1") ||
+            (socket.isDeveloper2 && sessionData.currentTurn === "developer2");
+
+        if (!isAllowed) return; 
+
         socket.to(sessionId).emit("code-exchanged", {
             code,
-            userId: socket.userId,
-            userName: socket.user.name
+            senderId: socket.userId
         });
     });
+
 
     //  socket.on("code-operation", ({ sessionId, changes }) => {
     //     socket.to(sessionId).emit("remote-code-operation", { changes });
